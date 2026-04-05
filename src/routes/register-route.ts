@@ -20,8 +20,8 @@ export const registerRoute: FastifyPluginAsyncZod = async (app) => {
             refreshToken: z.string(),
           }),
           409: z.object({
-            message: z.string(),
-            error: z.string(),
+            message: z.literal('User with this email already exists'),
+            error: z.literal('USER_ALREADY_EXISTS'),
           }),
         },
         body: z.object({
