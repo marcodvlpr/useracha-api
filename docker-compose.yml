@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: bitnami/postgresql
+    container_name: app-postgres
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: app_db
+    ports:
+      - "5444:5432"
