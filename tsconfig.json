@@ -10,8 +10,9 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "rootDir": "./src"
   },
-  "include": ["src/**/*", "drizzle.config.ts"],
+  "include": ["src/**/*"],
   "files": ["src/types/fastify.d.ts"],
 }
