@@ -5,6 +5,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import z from 'zod';
 import bcrypt from 'bcryptjs';
 import { refreshTokensTable } from '@/db/schemas/refresh-tokens';
+import { setAuthCookies } from '@/utils/set-auth-cookies';
 
 export const registerRoute: FastifyPluginAsyncZod = async (app) => {
   app.post(
@@ -34,13 +35,13 @@ export const registerRoute: FastifyPluginAsyncZod = async (app) => {
     async (request, reply) => {
       const { name, email, password } = request.body;
 
-      const userExists = await db
+      const [userExists] = await db
         .select()
         .from(usersTable)
         .where(eq(usersTable.email, email))
         .limit(1);
 
-      if (userExists.length > 0) {
+      if (userExists) {
         return reply.status(409).send({
           error: 'USER_ALREADY_EXISTS',
           message: 'User with this email already exists',
@@ -73,7 +74,7 @@ export const registerRoute: FastifyPluginAsyncZod = async (app) => {
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       });
 
-      return reply.status(201).send(tokens);
+      return setAuthCookies(reply, tokens).status(201).send(tokens);
     },
   );
 };

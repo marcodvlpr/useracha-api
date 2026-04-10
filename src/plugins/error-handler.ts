@@ -4,6 +4,7 @@ import fp from 'fastify-plugin';
 
 const errorHandler: FastifyPluginAsync = async (app) => {
   app.setErrorHandler((error, _, reply) => {
+    console.log(error);
     if (hasZodFastifySchemaValidationErrors(error)) {
       return reply.status(400).send({
         message: 'Validation error',

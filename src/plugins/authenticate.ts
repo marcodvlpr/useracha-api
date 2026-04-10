@@ -30,7 +30,7 @@ const authenticate: FastifyPluginAsync = async (app) => {
     'authenticate',
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
-        await request.jwtVerify();
+        await request.jwtVerify({ onlyCookie: true });
       } catch {
         return reply
           .status(401)

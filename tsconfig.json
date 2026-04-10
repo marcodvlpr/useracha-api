@@ -9,8 +9,9 @@
     "moduleResolution": "node16",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "outDir": "./dist"
   },
   "include": ["src/**/*", "drizzle.config.ts"],
-  "files": ["src/types/fastify.d.ts"]
+  "files": ["src/types/fastify.d.ts"],
 }

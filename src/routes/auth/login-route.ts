@@ -6,6 +6,7 @@ import z from 'zod';
 import bcrypt from 'bcryptjs';
 
 import { refreshTokensTable } from '@/db/schemas/refresh-tokens';
+import { setAuthCookies } from '@/utils/set-auth-cookies';
 
 export const loginRoute: FastifyPluginAsyncZod = async (app) => {
   app.post(
@@ -73,7 +74,23 @@ export const loginRoute: FastifyPluginAsyncZod = async (app) => {
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       });
 
-      return reply.status(200).send(tokens);
+      return reply
+        .setCookie('accessToken', tokens.accessToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'strict',
+          maxAge: 60 * 15,
+          path: '/',
+        })
+        .setCookie('refreshToken', tokens.refreshToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'strict',
+          maxAge: 60 * 60 * 24 * 7,
+          path: '/',
+        })
+        .status(200)
+        .send(tokens);
     },
   );
 
@@ -144,7 +161,7 @@ export const loginRoute: FastifyPluginAsyncZod = async (app) => {
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       });
 
-      return reply.status(200).send(tokens);
+      return setAuthCookies(reply, tokens).status(201).send(tokens);
     },
   );
 };
