@@ -9,14 +9,14 @@ export function setAuthCookies(
     .setCookie('accessToken', tokens.accessToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'none',
       maxAge: 60 * 15,
       path: '/',
     })
     .setCookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'none',
       maxAge: 60 * 60 * 24 * 7,
       path: '/',
     });
